@@ -1,0 +1,34 @@
+package com.nielExpendex.expensesTracker.service;
+
+import com.nielExpendex.expensesTracker.model.Users;
+import com.nielExpendex.expensesTracker.repository.UserRepo;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+
+import java.util.Optional;
+
+@Service
+@RequiredArgsConstructor
+public class UserService {
+    private final UserRepo userRepo;
+
+    public ResponseEntity<?> registerUser(Users user) {
+      return new ResponseEntity<>(userRepo.save(user),HttpStatus.ACCEPTED);
+    }
+
+    public ResponseEntity<String> login(Users user) {
+        Optional<Users> dbuser = userRepo.findByEmail(user.getEmail());
+
+        if(dbuser.isPresent()) {
+            if (user.getPassword().equals(dbuser.get().getPassword())) {
+                return new ResponseEntity<>("credentials correct", HttpStatus.ACCEPTED);
+            }else {
+                return new ResponseEntity<>("invalid email or password", HttpStatus.NOT_FOUND);
+            }
+        } else {
+            return new ResponseEntity<>("invalid email or password", HttpStatus.NOT_FOUND);
+        }
+    }
+}
