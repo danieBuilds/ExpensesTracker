@@ -19,16 +19,26 @@ public class UserService {
     }
 
     public ResponseEntity<String> login(Users user) {
-        Optional<Users> dbuser = userRepo.findByEmail(user.getEmail());
+        Authentication authentication = authenticationManager
+                .authenticate(new UsernamePasswordAuthenticationToken(
+                                user.getUsername(), user.getPassword()
+                        )
+                );
+        if (authentication.isAuthenticated())
+            return new ResponseEntity<>(jwtservice.generateToken(user.getUsername()),HttpStatus.ACCEPTED);
+        else
+            return new ResponseEntity<>("login failed",HttpStatus.FORBIDDEN);
 
-        if(dbuser.isPresent()) {
-            if (user.getPassword().equals(dbuser.get().getPassword())) {
-                return new ResponseEntity<>("credentials correct", HttpStatus.ACCEPTED);
-            }else {
-                return new ResponseEntity<>("invalid email or password", HttpStatus.NOT_FOUND);
-            }
-        } else {
-            return new ResponseEntity<>("invalid email or password", HttpStatus.NOT_FOUND);
-        }
+//        Optional<Users> dbuser = userRepo.findByEmail(user.getEmail());
+
+//        if(dbuser.isPresent()) {
+//            if (user.getPassword().equals(dbuser.get().getPassword())) {
+//                return new ResponseEntity<>("credentials correct", HttpStatus.ACCEPTED);
+//            }else {
+//                return new ResponseEntity<>("invalid email or password", HttpStatus.NOT_FOUND);
+//            }
+//        } else {
+//            return new ResponseEntity<>("invalid email or password", HttpStatus.NOT_FOUND);
+//        }
     }
 }
