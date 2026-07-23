@@ -2,6 +2,7 @@ package com.nielExpendex.expensesTracker.service;
 
 import com.nielExpendex.expensesTracker.model.Users;
 import com.nielExpendex.expensesTracker.repository.UserRepo;
+import com.nielExpendex.expensesTracker.security.Jwtservice;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
