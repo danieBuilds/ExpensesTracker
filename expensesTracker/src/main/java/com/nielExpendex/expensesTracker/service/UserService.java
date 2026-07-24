@@ -12,7 +12,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -26,6 +25,7 @@ public class UserService {
     private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
 
     public ResponseEntity<?> registerUser(Users user) {
+        user.setPassword(encoder.encode(user.getPassword()));
       return new ResponseEntity<>(userRepo.save(user),HttpStatus.ACCEPTED);
     }
 
