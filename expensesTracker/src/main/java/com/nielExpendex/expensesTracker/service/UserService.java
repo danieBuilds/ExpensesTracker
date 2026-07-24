@@ -19,6 +19,12 @@ import java.util.Optional;
 public class UserService {
     private final UserRepo userRepo;
 
+    private final Jwtservice jwtservice;
+
+    final AuthenticationManager authenticationManager;
+
+    private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
+
     public ResponseEntity<?> registerUser(Users user) {
       return new ResponseEntity<>(userRepo.save(user),HttpStatus.ACCEPTED);
     }
