@@ -27,7 +27,12 @@ public class TransactionsController {
     }
     @GetMapping("getTransactions")
     public ResponseEntity<List<TransactionResponse>> getTransactions(){
-        return transactionService.getTransactions();
+        List<TransactionResponse> tr = transactionService.getTransactions();
+        if (tr.isEmpty()){
+            return new ResponseEntity<>(tr, HttpStatus.NOT_FOUND);
+        }else {
+            return new ResponseEntity<>(tr, HttpStatus.OK);
+        }
     }
     @GetMapping("getTransaction/{id}")
     public ResponseEntity<TransactionResponse> getTransaction(@PathVariable int id){
