@@ -87,7 +87,7 @@ public class TransactionService {
             tr.setDate(transaction.get().getDate());
             tr.setAmount(transaction.get().getAmount());
             tr.setType(transaction.get().getType());
-            return new ResponseEntity<>(tr,HttpStatus.OK );
+            return tr;
         }
         return tr;
     }
