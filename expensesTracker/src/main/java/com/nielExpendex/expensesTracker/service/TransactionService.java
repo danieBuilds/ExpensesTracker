@@ -51,11 +51,9 @@ public class TransactionService {
             transaction.setDescription(transactions.getDescription());
 
             transactionRepo.save(transaction);
-            return new ResponseEntity<>("Transaction added successfully",HttpStatus.ACCEPTED);
-        }else {
-            return new ResponseEntity<>("Transaction added unsuccessfully",HttpStatus.FORBIDDEN);
-        }
-
+        System.out.println("saved");
+        log.info("returning!!!!!!!!!!!!!");
+            return "Transaction added successfully";
     }
 
     public ResponseEntity<List<TransactionResponse>> getTransactions() {
