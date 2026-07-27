@@ -29,6 +29,12 @@ public class UserController {
 
     @PostMapping("login")
     public ResponseEntity<String> login(@RequestBody Users user){
-        return userService.login(user);
+        String res = userService.login(user);
+
+        if (res.equals("login failed")){
+            return new ResponseEntity<>(res, HttpStatus.FORBIDDEN);
+        }else {
+            return new ResponseEntity<>(res, HttpStatus.OK);
+        }
     }
 }
