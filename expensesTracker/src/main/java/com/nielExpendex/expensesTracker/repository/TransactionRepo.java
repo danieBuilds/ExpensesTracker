@@ -1,6 +1,7 @@
 package com.nielExpendex.expensesTracker.repository;
 
 import com.nielExpendex.expensesTracker.model.Transactions;
+import com.nielExpendex.expensesTracker.model.Users;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
