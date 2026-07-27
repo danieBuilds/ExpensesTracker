@@ -58,6 +58,14 @@ public class TransactionsController {
 
     @DeleteMapping("transaction/{id}")
     public ResponseEntity<String> deleteTransaction(@PathVariable int id){
-        return transactionService.deleteTransaction(id);
+        String del = transactionService.deleteTransaction(id);
+
+        if (del.equals("transaction not found")){
+            return new ResponseEntity<>(del,HttpStatus.NO_CONTENT);
+        } else if (del.equals("deleted")) {
+            return new ResponseEntity<>(del,HttpStatus.OK);
+        }else {
+            return new ResponseEntity<>(del,HttpStatus.FORBIDDEN);
+        }
     }
 }
