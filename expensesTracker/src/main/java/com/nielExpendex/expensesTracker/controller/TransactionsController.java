@@ -36,7 +36,13 @@ public class TransactionsController {
     }
     @GetMapping("getTransaction/{id}")
     public ResponseEntity<TransactionResponse> getTransaction(@PathVariable int id){
-        return transactionService.getTransaction(id);
+        TransactionResponse tr = transactionService.getTransaction(id);
+
+        if (tr == null){
+            return new ResponseEntity<>(tr, HttpStatus.NOT_FOUND);
+        }else {
+            return new ResponseEntity<>(tr, HttpStatus.OK);
+        }
     }
     @PutMapping("updateTransaction/{id}")
     public ResponseEntity<String> updateTransaction(@PathVariable int id, @RequestBody TransactionRequest tr){
