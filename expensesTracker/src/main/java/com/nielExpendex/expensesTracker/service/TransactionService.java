@@ -93,14 +93,12 @@ public class TransactionService {
         return new ResponseEntity<>(tr,HttpStatus.NOT_FOUND );
     }
 
-    public ResponseEntity<String> updateTransaction(int id, TransactionRequest tr) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-        String username = authentication.getName();
-
-        Users currentUser = userRepo.findByUsername(username);
-
-
+    public String updateTransaction(int id, TransactionRequest tr) {
+//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//
+//        String username = authentication.getName();
+//
+//        Users currentUser = userRepo.findByUsername(username);
         Optional<Transactions> transaction = transactionRepo.findById(id);
 
 
