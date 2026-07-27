@@ -7,4 +7,9 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface TransactionRepo extends JpaRepository<Transactions, Integer> {
 
+    List<Transactions> findByUser(Users currentUser);
+
+    Optional<Transactions> findByIdAndUser(int id, Users currentUser);
+
+    List<Transactions> findAllByUser(Users currentUser);
 }
