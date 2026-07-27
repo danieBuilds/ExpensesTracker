@@ -44,7 +44,7 @@ public class TransactionsController {
             return new ResponseEntity<>(tr, HttpStatus.OK);
         }
     }
-    @PutMapping("updateTransaction/{id}")
+    @PutMapping("transaction/{id}")
     public ResponseEntity<String> updateTransaction(@PathVariable int id, @RequestBody TransactionRequest tr){
         String ut = transactionService.updateTransaction(id, tr);
         if (ut.equals("transaction not found ")){
