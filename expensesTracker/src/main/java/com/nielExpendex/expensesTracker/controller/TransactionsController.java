@@ -17,7 +17,13 @@ public class TransactionsController {
 
     @PostMapping("transaction")
     public ResponseEntity<String> addTransactions(@RequestBody TransactionRequest transactions){
-        return transactionService.addTransaction(transactions);
+        String res = transactionService.addTransaction(transactions);
+
+        if (res.equals("Transaction added successfully")){
+            return new ResponseEntity<>(res,HttpStatus.CREATED);
+        }else {
+            return new ResponseEntity<>("Not accepted",HttpStatus.FORBIDDEN);
+        }
     }
     @GetMapping("getTransactions")
     public ResponseEntity<List<TransactionResponse>> getTransactions(){
