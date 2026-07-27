@@ -56,7 +56,7 @@ public class TransactionService {
             return "Transaction added successfully";
     }
 
-    public ResponseEntity<List<TransactionResponse>> getTransactions() {
+    public List<TransactionResponse> getTransactions() {
         List<TransactionResponse> response = new ArrayList<>();
         List<Transactions> transactions = transactionRepo.findAll();
 
