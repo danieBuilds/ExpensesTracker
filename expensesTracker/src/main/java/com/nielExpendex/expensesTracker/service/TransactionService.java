@@ -58,7 +58,10 @@ public class TransactionService {
 
     public List<TransactionResponse> getTransactions() {
         List<TransactionResponse> response = new ArrayList<>();
-        List<Transactions> transactions = transactionRepo.findAll();
+//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//        String username = authentication.getName();
+//        Users currentUser = userRepo.findByUsername(username);
+        List<Transactions> transactions = transactionRepo.findAllByUser(getCurrentUser());
 
         for (Transactions t : transactions){
             TransactionResponse tr = new TransactionResponse();
