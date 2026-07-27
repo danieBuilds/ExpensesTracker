@@ -16,8 +16,14 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("register")
-    public ResponseEntity<?> registerUser(@RequestBody Users user){
-        return userService.registerUser(user);
+    public ResponseEntity<String> registerUser(@RequestBody Users user){
+        String res = userService.registerUser(user);
+        if (res.isBlank()){
+            return new ResponseEntity<>("registration failed",HttpStatus.INTERNAL_SERVER_ERROR);
+        }else {
+            return new ResponseEntity<>(res,HttpStatus.CREATED);
+        }
+
     }
 
     @PostMapping("login")
