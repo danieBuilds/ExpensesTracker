@@ -44,7 +44,7 @@ public class TransactionService {
         log.info("Here with user: {}", user);
 
             Transactions transaction = new Transactions();
-            transaction.setUser(user.get());
+            transaction.setUser(user);
             transaction.setDate(transactions.getDate());
             transaction.setAmount(transactions.getAmount());
             transaction.setType(transactions.getType());
