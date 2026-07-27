@@ -24,8 +24,10 @@ public class TransactionService {
     private final TransactionRepo transactionRepo;
     private final UserRepo userRepo;
 
-    public ResponseEntity<String> addTransaction(TransactionRequest transactions) {
-        Optional<Users> user = userRepo.findById(transactions.getUserId());
+    public Users getCurrentUser(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        assert authentication != null;
 
         if (user.isPresent()) {
             Transactions transaction = new Transactions();
