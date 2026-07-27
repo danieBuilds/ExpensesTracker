@@ -10,5 +10,5 @@ public class TransactionRequest {
     private String description;
     private Date date;
     private String type;
-    private Integer userId;
+//    private Integer userId;
 }
