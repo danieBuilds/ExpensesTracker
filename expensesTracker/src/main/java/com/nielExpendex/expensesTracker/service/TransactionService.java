@@ -128,9 +128,12 @@ public class TransactionService {
 
         if (t1.getUser().getId() == currentUser.getId()){
 
-            transactionRepo.delete(t1);
-            return new ResponseEntity<>("deleted",HttpStatus.OK);
-
+        if (t1.isEmpty()) {
+            return "transaction not found";
+        }
+        if (t1.get().getUser().getId() == getCurrentUser().getId()) {
+            transactionRepo.delete(t1.get());
+            return "deleted";
         }
         return new ResponseEntity<>("failed to delete",HttpStatus.INTERNAL_SERVER_ERROR);
 
