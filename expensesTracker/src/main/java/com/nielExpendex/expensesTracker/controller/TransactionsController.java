@@ -46,7 +46,14 @@ public class TransactionsController {
     }
     @PutMapping("updateTransaction/{id}")
     public ResponseEntity<String> updateTransaction(@PathVariable int id, @RequestBody TransactionRequest tr){
-        return transactionService.updateTransaction(id, tr);
+        String ut = transactionService.updateTransaction(id, tr);
+        if (ut.equals("transaction not found ")){
+            return new ResponseEntity<>(ut,HttpStatus.NOT_FOUND);
+        }else if (ut.equals("update successfully")) {
+            return new ResponseEntity<>(ut,HttpStatus.ACCEPTED);
+        }else {
+            return new ResponseEntity<>(ut,HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @DeleteMapping("transaction/{id}")
