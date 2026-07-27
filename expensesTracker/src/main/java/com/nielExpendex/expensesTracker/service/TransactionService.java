@@ -134,7 +134,8 @@ public class TransactionService {
             transactionRepo.delete(t1.get());
             return "deleted";
         }
-        return new ResponseEntity<>("failed to delete",HttpStatus.INTERNAL_SERVER_ERROR);
+
+        return "failed to delete";
 
     }
 }
