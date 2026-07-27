@@ -74,8 +74,12 @@ public class TransactionService {
         return new ResponseEntity<>(response,HttpStatus.OK);
     }
 
-    public ResponseEntity<TransactionResponse> getTransaction(int id) {
-        Optional<Transactions> transaction = transactionRepo.findById(id);
+    public TransactionResponse getTransaction(int id) {
+//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//        String username = authentication.getName();
+//        Users currentUser = userRepo.findByUsername(username);
+//        List<Transactions> transactions = transactionRepo.findByUser(getCurrentUser());
+        Optional<Transactions> transaction = transactionRepo.findByIdAndUser(id,getCurrentUser());
         TransactionResponse tr = new TransactionResponse();
 
         if (transaction.isPresent()){
