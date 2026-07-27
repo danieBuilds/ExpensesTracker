@@ -118,15 +118,14 @@ public class TransactionService {
         }
     }
 
-    public ResponseEntity<String> deleteTransaction(int id) {
-        Transactions t1 = transactionRepo.findById(id).get();
-
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-        String username = authentication.getName();
-        Users currentUser = userRepo.findByUsername(username);
-
-        if (t1.getUser().getId() == currentUser.getId()){
+    public String deleteTransaction(int id) {
+        Optional<Transactions> t1 = transactionRepo.findById(id);
+//
+//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//
+//        assert authentication != null;
+//        String username = authentication.getName();
+//        Users currentUser = userRepo.findByUsername(username);
 
         if (t1.isEmpty()) {
             return "transaction not found";
