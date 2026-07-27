@@ -24,9 +24,14 @@ public class UserService {
 
     private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
 
-    public ResponseEntity<?> registerUser(Users user) {
-        user.setPassword(encoder.encode(user.getPassword()));
-      return new ResponseEntity<>(userRepo.save(user),HttpStatus.ACCEPTED);
+    public String registerUser(Users user) {
+        try {
+            user.setPassword(encoder.encode(user.getPassword()));
+            userRepo.save(user);
+            return "registration successful";
+        } catch (RuntimeException e) {
+            return " ";
+        }
     }
 
     public ResponseEntity<String> login(Users user) {
