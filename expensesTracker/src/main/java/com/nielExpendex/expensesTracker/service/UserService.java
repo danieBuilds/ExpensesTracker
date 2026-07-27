@@ -43,7 +43,7 @@ public class UserService {
         if (authentication.isAuthenticated())
             return jwtservice.generateToken(user.getUsername());
         else
-            return new ResponseEntity<>("login failed",HttpStatus.FORBIDDEN);
+            return "login failed";
 
 //        Optional<Users> dbuser = userRepo.findByEmail(user.getEmail());
 
