@@ -102,18 +102,20 @@ public class TransactionService {
         Optional<Transactions> transaction = transactionRepo.findById(id);
 
 
-        if (transaction.isPresent()){
-            if(transaction.get().getUser().getId() == currentUser.getId()){
-                transaction.get().setDescription(tr.getDescription());
-                transaction.get().setDate(tr.getDate());
-                transaction.get().setAmount(tr.getAmount());
-                transaction.get().setType(tr.getType());
-                Transactions t1 = transaction.get();
-                transactionRepo.save(t1);
-                return new ResponseEntity<>("update successfully",HttpStatus.ACCEPTED);
-            }
+        if (transaction.isEmpty()){
+            return "transaction not found ";
         }
-        return new ResponseEntity<>("A problem occurred during the update",HttpStatus.INTERNAL_SERVER_ERROR);
+        if(transaction.get().getUser().getId() == getCurrentUser().getId()){
+            transaction.get().setDescription(tr.getDescription());
+            transaction.get().setDate(tr.getDate());
+            transaction.get().setAmount(tr.getAmount());
+            transaction.get().setType(tr.getType());
+            Transactions t1 = transaction.get();
+            transactionRepo.save(t1);
+            return "update successfully";
+        }else{
+            return "A problem occurred during the update";
+        }
     }
 
     public ResponseEntity<String> deleteTransaction(int id) {
