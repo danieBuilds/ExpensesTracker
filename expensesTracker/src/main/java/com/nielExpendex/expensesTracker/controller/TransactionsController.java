@@ -15,7 +15,7 @@ import java.util.List;
 public class TransactionsController {
     private final TransactionService transactionService;
 
-    @PostMapping("addTransactions")
+    @PostMapping("transaction")
     public ResponseEntity<String> addTransactions(@RequestBody TransactionRequest transactions){
         return transactionService.addTransaction(transactions);
     }
