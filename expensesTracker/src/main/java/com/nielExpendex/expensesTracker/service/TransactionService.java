@@ -71,7 +71,7 @@ public class TransactionService {
             tr.setDescription(t.getDescription());
             response.add(tr);
         }
-        return new ResponseEntity<>(response,HttpStatus.OK);
+        return response;
     }
 
     public TransactionResponse getTransaction(int id) {
