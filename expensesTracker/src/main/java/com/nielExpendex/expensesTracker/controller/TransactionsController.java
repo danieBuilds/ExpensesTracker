@@ -34,7 +34,7 @@ public class TransactionsController {
             return new ResponseEntity<>(tr, HttpStatus.OK);
         }
     }
-    @GetMapping("getTransaction/{id}")
+    @GetMapping("transaction/{id}")
     public ResponseEntity<TransactionResponse> getTransaction(@PathVariable int id){
         TransactionResponse tr = transactionService.getTransaction(id);
 
