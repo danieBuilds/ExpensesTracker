@@ -89,8 +89,7 @@ public class TransactionService {
             tr.setType(transaction.get().getType());
             return new ResponseEntity<>(tr,HttpStatus.OK );
         }
-
-        return new ResponseEntity<>(tr,HttpStatus.NOT_FOUND );
+        return tr;
     }
 
     public String updateTransaction(int id, TransactionRequest tr) {
