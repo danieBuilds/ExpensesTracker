@@ -25,7 +25,7 @@ public class TransactionsController {
             return new ResponseEntity<>("Not accepted",HttpStatus.FORBIDDEN);
         }
     }
-    @GetMapping("getTransactions")
+    @GetMapping("transactions")
     public ResponseEntity<List<TransactionResponse>> getTransactions(){
         List<TransactionResponse> tr = transactionService.getTransactions();
         if (tr.isEmpty()){
