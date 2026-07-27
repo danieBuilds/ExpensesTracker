@@ -34,7 +34,7 @@ public class UserService {
         }
     }
 
-    public ResponseEntity<String> login(Users user) {
+    public String login(Users user) {
         Authentication authentication = authenticationManager
                 .authenticate(new UsernamePasswordAuthenticationToken(
                                 user.getUsername(), user.getPassword()
