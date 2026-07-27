@@ -41,7 +41,7 @@ public class UserService {
                         )
                 );
         if (authentication.isAuthenticated())
-            return new ResponseEntity<>(jwtservice.generateToken(user.getUsername()),HttpStatus.ACCEPTED);
+            return jwtservice.generateToken(user.getUsername());
         else
             return new ResponseEntity<>("login failed",HttpStatus.FORBIDDEN);
 
