@@ -29,7 +29,20 @@ public class TransactionService {
 
         assert authentication != null;
 
-        if (user.isPresent()) {
+        return userRepo.findByUsername(authentication.getName());
+    }
+
+    public String addTransaction(TransactionRequest transactions) {
+        //Optional<Users> user = userRepo.findById(transactions.getUserId());
+//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//
+//        String username = authentication.getName();
+//        Users user = userRepo.findByUsername(username);
+
+        Users user = getCurrentUser();
+
+        log.info("Here with user: {}", user);
+
             Transactions transaction = new Transactions();
             transaction.setUser(user.get());
             transaction.setDate(transactions.getDate());
