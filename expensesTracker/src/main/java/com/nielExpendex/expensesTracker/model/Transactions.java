@@ -17,4 +17,6 @@ public class Transactions {
     private String type;
     @ManyToOne
     private Users user;
+    @ManyToOne
+    private Category category;
 }

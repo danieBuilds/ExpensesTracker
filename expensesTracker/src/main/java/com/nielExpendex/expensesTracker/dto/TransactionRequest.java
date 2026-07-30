@@ -1,5 +1,6 @@
 package com.nielExpendex.expensesTracker.dto;
 
+import com.nielExpendex.expensesTracker.model.Category;
 import lombok.Data;
 
 import java.util.Date;
@@ -10,5 +11,6 @@ public class TransactionRequest {
     private String description;
     private Date date;
     private String type;
+    private Integer categoryId;
 //    private Integer userId;
 }

@@ -4,19 +4,22 @@ import com.nielExpendex.expensesTracker.dto.TransactionRequest;
 import com.nielExpendex.expensesTracker.dto.TransactionResponse;
 import com.nielExpendex.expensesTracker.service.TransactionService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequestMapping("transaction")
 @RequiredArgsConstructor
 public class TransactionsController {
     private final TransactionService transactionService;
 
-    @PostMapping("transaction")
+    @PostMapping("transactions")
     public ResponseEntity<String> addTransactions(@RequestBody TransactionRequest transactions){
         String res = transactionService.addTransaction(transactions);
 
@@ -25,6 +28,15 @@ public class TransactionsController {
         }else {
             return new ResponseEntity<>("Not accepted",HttpStatus.FORBIDDEN);
         }
+    }
+    @GetMapping("transactions/search")
+    public ResponseEntity<List<TransactionResponse>> getTransactions(
+            @RequestParam(required = false) String type,
+            @RequestParam(required = false) int category,
+            @RequestParam(required = false) Date date,
+            @RequestParam(required = false) String keyword) {
+
+        return new ResponseEntity<>(transactionService.getTransactions(type, category, date, keyword),HttpStatus.OK);
     }
     @GetMapping("transactions")
     public ResponseEntity<List<TransactionResponse>> getTransactions(){
@@ -35,7 +47,7 @@ public class TransactionsController {
             return new ResponseEntity<>(tr, HttpStatus.OK);
         }
     }
-    @GetMapping("transaction/{id}")
+    @GetMapping("transactions/{id}")
     public ResponseEntity<TransactionResponse> getTransaction(@PathVariable int id){
         TransactionResponse tr = transactionService.getTransaction(id);
 
@@ -45,7 +57,7 @@ public class TransactionsController {
             return new ResponseEntity<>(tr, HttpStatus.OK);
         }
     }
-    @PutMapping("transaction/{id}")
+    @PutMapping("transactions/{id}")
     public ResponseEntity<String> updateTransaction(@PathVariable int id, @RequestBody TransactionRequest tr){
         String ut = transactionService.updateTransaction(id, tr);
         if (ut.equals("transaction not found ")){
@@ -57,7 +69,7 @@ public class TransactionsController {
         }
     }
 
-    @DeleteMapping("transaction/{id}")
+    @DeleteMapping("transactions/{id}")
     public ResponseEntity<String> deleteTransaction(@PathVariable int id){
         String del = transactionService.deleteTransaction(id);
 

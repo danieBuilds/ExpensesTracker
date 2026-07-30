@@ -1,5 +1,6 @@
 package com.nielExpendex.expensesTracker.dto;
 
+import com.nielExpendex.expensesTracker.model.Category;
 import lombok.Data;
 
 import java.util.Date;
@@ -10,4 +11,5 @@ public class TransactionResponse {
     private String description;
     private Date date;
     private String type;
+    private String category;
 }
