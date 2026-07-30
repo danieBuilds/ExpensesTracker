@@ -2,17 +2,23 @@ package com.nielExpendex.expensesTracker.service;
 
 import com.nielExpendex.expensesTracker.dto.TransactionRequest;
 import com.nielExpendex.expensesTracker.dto.TransactionResponse;
+import com.nielExpendex.expensesTracker.model.Category;
 import com.nielExpendex.expensesTracker.model.Transactions;
 import com.nielExpendex.expensesTracker.model.Users;
+import com.nielExpendex.expensesTracker.repository.CategoryRepo;
 import com.nielExpendex.expensesTracker.repository.TransactionRepo;
 import com.nielExpendex.expensesTracker.repository.UserRepo;
+import com.nielExpendex.expensesTracker.specification.TransactionSpecification;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,6 +28,7 @@ import java.util.Optional;
 public class TransactionService {
     private final TransactionRepo transactionRepo;
     private final UserRepo userRepo;
+    private final CategoryRepo categoryRepo;
 
     public Users getCurrentUser(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -32,22 +39,18 @@ public class TransactionService {
     }
 
     public String addTransaction(TransactionRequest transactions) {
-        //Optional<Users> user = userRepo.findById(transactions.getUserId());
-//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//
-//        String username = authentication.getName();
-//        Users user = userRepo.findByUsername(username);
 
         Users user = getCurrentUser();
 
         log.info("Here with user: {}", user);
-
+        Category c = categoryRepo.findById(transactions.getCategoryId()).get();
             Transactions transaction = new Transactions();
             transaction.setUser(user);
             transaction.setDate(transactions.getDate());
             transaction.setAmount(transactions.getAmount());
             transaction.setType(transactions.getType());
             transaction.setDescription(transactions.getDescription());
+            transaction.setCategory(c);
 
             transactionRepo.save(transaction);
         System.out.println("saved");
@@ -57,9 +60,6 @@ public class TransactionService {
 
     public List<TransactionResponse> getTransactions() {
         List<TransactionResponse> response = new ArrayList<>();
-//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//        String username = authentication.getName();
-//        Users currentUser = userRepo.findByUsername(username);
         List<Transactions> transactions = transactionRepo.findAllByUser(getCurrentUser());
 
         for (Transactions t : transactions){
@@ -74,10 +74,6 @@ public class TransactionService {
     }
 
     public TransactionResponse getTransaction(int id) {
-//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//        String username = authentication.getName();
-//        Users currentUser = userRepo.findByUsername(username);
-//        List<Transactions> transactions = transactionRepo.findByUser(getCurrentUser());
         Optional<Transactions> transaction = transactionRepo.findByIdAndUser(id,getCurrentUser());
         TransactionResponse tr = new TransactionResponse();
 
@@ -92,11 +88,6 @@ public class TransactionService {
     }
 
     public String updateTransaction(int id, TransactionRequest tr) {
-//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//
-//        String username = authentication.getName();
-//
-//        Users currentUser = userRepo.findByUsername(username);
         Optional<Transactions> transaction = transactionRepo.findById(id);
 
 
@@ -118,12 +109,6 @@ public class TransactionService {
 
     public String deleteTransaction(int id) {
         Optional<Transactions> t1 = transactionRepo.findById(id);
-//
-//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//
-//        assert authentication != null;
-//        String username = authentication.getName();
-//        Users currentUser = userRepo.findByUsername(username);
 
         if (t1.isEmpty()) {
             return "transaction not found";
@@ -135,5 +120,94 @@ public class TransactionService {
 
         return "failed to delete";
 
+    }
+//
+//    public List<TransactionResponse> filteredTransactions(String keyword) {
+//        List<Transactions> transactions = transactionRepo.findAllByUserAndKeyword(getCurrentUser(),keyword);
+//        List<TransactionResponse> transactionResponses = new ArrayList<>();
+//
+//        for (Transactions t1 : transactions){
+//            if (t1.getUser().getUsername().equals(getCurrentUser().getUsername())) {
+//                TransactionResponse tr = new TransactionResponse();
+//                tr.setType(t1.getType());
+//                tr.setDescription(t1.getDescription());
+//                tr.setDate(t1.getDate());
+//                tr.setAmount(t1.getAmount());
+//                transactionResponses.add(tr);
+//            }else {
+//                return transactionResponses;
+//            }
+//        }
+//        return transactionResponses;
+//    }
+//
+//    public List<TransactionResponse> searchCategory(String keyword) {
+//        List<Transactions> transactions = transactionRepo.findAllByUserAndCategory(getCurrentUser(),keyword);
+//        List<TransactionResponse> transactionResponses = new ArrayList<>();
+//
+//        for (Transactions t1 : transactions){
+//            if (t1.getUser().getUsername().equals(getCurrentUser().getUsername())) {
+//                TransactionResponse tr = new TransactionResponse();
+//                tr.setType(t1.getType());
+//                tr.setDescription(t1.getDescription());
+//                tr.setDate(t1.getDate());
+//                tr.setAmount(t1.getAmount());
+//                transactionResponses.add(tr);
+//            }else {
+//                return transactionResponses;
+//            }
+//        }
+//        return transactionResponses;
+//    }
+
+    public List<TransactionResponse> getTransactions(String type, Integer category, Date date, String keyword) {
+        List<TransactionResponse> transactionResponses = new ArrayList<>();
+        Specification<Transactions> spec =
+                Specification.where(TransactionSpecification.hasUser(getCurrentUser()));
+        if(type != null){
+
+            spec = spec.and(
+                    TransactionSpecification.hasType(type)
+            );
+
+        }
+        if(category != null){
+
+            spec = spec.and(
+                    TransactionSpecification.hasCategory(category)
+            );
+
+        }
+        if(date != null){
+
+            spec = spec.and(
+                    TransactionSpecification.hasDate(date)
+            );
+
+        }
+        if(keyword != null){
+
+            spec = spec.and(
+                    TransactionSpecification.hasKeyword(keyword)
+            );
+
+        }
+        List<Transactions> transactions =
+                transactionRepo.findAll(spec);
+
+        for (Transactions t1 : transactions){
+            if (t1.getUser().getUsername().equals(getCurrentUser().getUsername())) {
+                TransactionResponse tr = new TransactionResponse();
+                tr.setType(t1.getType());
+                tr.setDescription(t1.getDescription());
+                tr.setDate(t1.getDate());
+                tr.setAmount(t1.getAmount());
+                tr.setCategory(t1.getCategory().getName());
+                transactionResponses.add(tr);
+            }else {
+                return transactionResponses;
+            }
+        }
+        return transactionResponses;
     }
 }
