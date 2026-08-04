@@ -3,6 +3,7 @@ package com.nielExpendex.expensesTracker.service;
 import com.nielExpendex.expensesTracker.dto.TransactionRequest;
 import com.nielExpendex.expensesTracker.dto.TransactionResponse;
 import com.nielExpendex.expensesTracker.model.Category;
+import com.nielExpendex.expensesTracker.model.TransactionType;
 import com.nielExpendex.expensesTracker.model.Transactions;
 import com.nielExpendex.expensesTracker.model.Users;
 import com.nielExpendex.expensesTracker.repository.CategoryRepo;
@@ -17,6 +18,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -48,7 +50,7 @@ public class TransactionService {
             transaction.setUser(user);
             transaction.setDate(transactions.getDate());
             transaction.setAmount(transactions.getAmount());
-            transaction.setType(transactions.getType());
+            transaction.setType(TransactionType.valueOf(transactions.getType()));
             transaction.setDescription(transactions.getDescription());
             transaction.setCategory(c);
 
@@ -66,8 +68,9 @@ public class TransactionService {
             TransactionResponse tr = new TransactionResponse();
             tr.setAmount(t.getAmount());
             tr.setDate(t.getDate());
-            tr.setType(t.getType());
+            tr.setType(String.valueOf(t.getType()));
             tr.setDescription(t.getDescription());
+            tr.setCategory(t.getCategory().getName());
             response.add(tr);
         }
         return response;
@@ -81,7 +84,7 @@ public class TransactionService {
             tr.setDescription(transaction.get().getDescription());
             tr.setDate(transaction.get().getDate());
             tr.setAmount(transaction.get().getAmount());
-            tr.setType(transaction.get().getType());
+            tr.setType(String.valueOf(transaction.get().getType()));
             return tr;
         }
         return tr;
@@ -98,7 +101,7 @@ public class TransactionService {
             transaction.get().setDescription(tr.getDescription());
             transaction.get().setDate(tr.getDate());
             transaction.get().setAmount(tr.getAmount());
-            transaction.get().setType(tr.getType());
+            transaction.get().setType(TransactionType.valueOf(tr.getType()));
             Transactions t1 = transaction.get();
             transactionRepo.save(t1);
             return "update successfully";
@@ -121,46 +124,8 @@ public class TransactionService {
         return "failed to delete";
 
     }
-//
-//    public List<TransactionResponse> filteredTransactions(String keyword) {
-//        List<Transactions> transactions = transactionRepo.findAllByUserAndKeyword(getCurrentUser(),keyword);
-//        List<TransactionResponse> transactionResponses = new ArrayList<>();
-//
-//        for (Transactions t1 : transactions){
-//            if (t1.getUser().getUsername().equals(getCurrentUser().getUsername())) {
-//                TransactionResponse tr = new TransactionResponse();
-//                tr.setType(t1.getType());
-//                tr.setDescription(t1.getDescription());
-//                tr.setDate(t1.getDate());
-//                tr.setAmount(t1.getAmount());
-//                transactionResponses.add(tr);
-//            }else {
-//                return transactionResponses;
-//            }
-//        }
-//        return transactionResponses;
-//    }
-//
-//    public List<TransactionResponse> searchCategory(String keyword) {
-//        List<Transactions> transactions = transactionRepo.findAllByUserAndCategory(getCurrentUser(),keyword);
-//        List<TransactionResponse> transactionResponses = new ArrayList<>();
-//
-//        for (Transactions t1 : transactions){
-//            if (t1.getUser().getUsername().equals(getCurrentUser().getUsername())) {
-//                TransactionResponse tr = new TransactionResponse();
-//                tr.setType(t1.getType());
-//                tr.setDescription(t1.getDescription());
-//                tr.setDate(t1.getDate());
-//                tr.setAmount(t1.getAmount());
-//                transactionResponses.add(tr);
-//            }else {
-//                return transactionResponses;
-//            }
-//        }
-//        return transactionResponses;
-//    }
 
-    public List<TransactionResponse> getTransactions(String type, Integer category, Date date, String keyword) {
+    public List<TransactionResponse> getTransactions(String type, Integer category, LocalDate date, String keyword) {
         List<TransactionResponse> transactionResponses = new ArrayList<>();
         Specification<Transactions> spec =
                 Specification.where(TransactionSpecification.hasUser(getCurrentUser()));
@@ -196,13 +161,17 @@ public class TransactionService {
                 transactionRepo.findAll(spec);
 
         for (Transactions t1 : transactions){
+
             if (t1.getUser().getUsername().equals(getCurrentUser().getUsername())) {
+
                 TransactionResponse tr = new TransactionResponse();
-                tr.setType(t1.getType());
+
+                tr.setType(String.valueOf(t1.getType()));
                 tr.setDescription(t1.getDescription());
                 tr.setDate(t1.getDate());
                 tr.setAmount(t1.getAmount());
                 tr.setCategory(t1.getCategory().getName());
+
                 transactionResponses.add(tr);
             }else {
                 return transactionResponses;

@@ -4,6 +4,7 @@ import com.nielExpendex.expensesTracker.model.Transactions;
 import com.nielExpendex.expensesTracker.model.Users;
 import org.springframework.data.jpa.domain.Specification;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 public class TransactionSpecification {
@@ -19,7 +20,7 @@ public class TransactionSpecification {
                 cb.equal(root.get("type"), type);
 
     }
-    public static Specification<Transactions> hasDate(Date date) {
+    public static Specification<Transactions> hasDate(LocalDate date) {
 
         return (root, query, cb) ->
                 cb.equal(root.get("date"), date);

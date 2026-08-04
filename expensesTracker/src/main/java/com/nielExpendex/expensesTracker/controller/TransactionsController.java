@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -33,7 +34,7 @@ public class TransactionsController {
     public ResponseEntity<List<TransactionResponse>> getTransactions(
             @RequestParam(required = false) String type,
             @RequestParam(required = false) int category,
-            @RequestParam(required = false) Date date,
+            @RequestParam(required = false) LocalDate date,
             @RequestParam(required = false) String keyword) {
 
         return new ResponseEntity<>(transactionService.getTransactions(type, category, date, keyword),HttpStatus.OK);
