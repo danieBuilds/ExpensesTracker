@@ -24,7 +24,6 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class BudgetService {
     private final UserRepo userRepo;
-    private final TransactionRepo transactionRepo;
     private final TransactionService transactionService;
     private final BudgetRepo budgetRepo;
     private final CategoryRepo categoryRepo;

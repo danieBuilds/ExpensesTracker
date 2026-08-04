@@ -5,7 +5,6 @@ import com.nielExpendex.expensesTracker.model.Users;
 import org.springframework.data.jpa.domain.Specification;
 
 import java.time.LocalDate;
-import java.util.Date;
 
 public class TransactionSpecification {
     public static Specification<Transactions> hasUser(Users user) {

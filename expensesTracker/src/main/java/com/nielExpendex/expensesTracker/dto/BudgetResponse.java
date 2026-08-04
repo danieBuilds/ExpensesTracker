@@ -1,7 +1,5 @@
 package com.nielExpendex.expensesTracker.dto;
 
-import com.nielExpendex.expensesTracker.model.Category;
-import com.nielExpendex.expensesTracker.model.Transactions;
 import lombok.Data;
 
 import java.math.BigDecimal;
